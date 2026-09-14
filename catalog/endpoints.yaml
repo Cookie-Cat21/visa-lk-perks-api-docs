@@ -11,16 +11,31 @@ endpoints:
   method: POST
   url: https://www.visa.com.lk/offers/api/portal/portal/perks/
   path: /offers/api/portal/portal/perks/
-  summary: VMORC perks; needs siteId + perkTypeRequests body.
+  summary: VMORC perks. Body must include siteId + a populated perkTypeRequests array (one entry per perk type); the old siteId+pageRequest-only body fails with 400/500. Fixed and verified 2026-09-14 via network capture + JS bundle inspection of visa.com.lk/en_lk/visa-offers-and-perks/ (public page, no auth) — confirmed 200 with no cookies via plain curl, so this is a genuinely stateless public endpoint.
   pagination:
     style: pageRequest
     params:
-      pageRequest.index: 0-based
-      pageRequest.limit: page size
-    lab: true
+      pageRequest.index: 0-based (per perkTypeRequests entry)
+      pageRequest.limit: page size (per perkTypeRequests entry)
+    lab: false
+  headers:
+    Content-Type: application/json
   body_json:
     siteId: www.visa.com.lk
-    pageRequest:
-      index: 0
-      limit: 20
+    perkTypeRequests:
+      - requestIdentifier: null
+        perkType: OFFERS
+        locale: en_lk
+        pageRequest:
+          index: 0
+          limit: 20
+      - requestIdentifier: null
+        perkType: PROMOTIONS
+        locale: en_lk
+        pageRequest:
+          index: 0
+          limit: 20
+      - requestIdentifier: null
+        perkType: BENEFITS
+        locale: en_lk
   access: json_api
