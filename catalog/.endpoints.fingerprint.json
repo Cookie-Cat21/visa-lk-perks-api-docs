@@ -1,5 +1,5 @@
 {
-  "sha256": "b0e8cdd98536d9e46aa564455a744a88da85160fb26ed57eef8674dfdb282c76",
+  "sha256": "5f0d33476271abc87b332eebff64f17fa647c21d004af7f19aab138e77027bd3",
   "endpoint_count": 1,
   "endpoints": {
     "portal_perks": {
@@ -9,16 +9,15 @@
       "url": "https://www.visa.com.lk/offers/api/portal/portal/perks/",
       "status": "live",
       "access": "json_api",
-      "summary": "VMORC perks; needs siteId + perkTypeRequests body.",
+      "summary": "VMORC perks. Body must include siteId + a populated perkTypeRequests array (one entry per perk type); the old siteId+pageRequest-only body fails with 400/500. Fixed and verified 2026-09-14 via network capture + JS bundle inspection of visa.com.lk/en_lk/visa-offers-and-perks/ (public page, no auth) \u2014 confirmed 200 with no cookies via plain curl, so this is a genuinely stateless public endpoint.",
       "pagination": {
         "style": "pageRequest",
         "params": {
-          "pageRequest.index": "0-based",
-          "pageRequest.limit": "page size"
+          "pageRequest.index": "0-based (per perkTypeRequests entry)",
+          "pageRequest.limit": "page size (per perkTypeRequests entry)"
         },
-        "lab": true
+        "lab": false
       }
     }
-  },
-  "updated": "2026-07-20"
+  }
 }
